@@ -1,0 +1,25 @@
+
+<spec>
+	<types>
+		<type name="id">
+			ID. A 31 bit unsigned integer.
+		</type>
+	</types>
+	<endpoints>
+		<endpoint method="POST" path="/contests">
+			<desc>Create a new contest</desc>
+			<req-params>
+				<param name="pagesize" type="u32" default="10">
+					Page size
+				</param>
+			</req-params>
+			<req-body type="NoIdContest"></req-body>
+			<responses>
+				<resp code="201">
+					<desc>When the new        contest was created successfully</desc>
+					<body type="id">Contest ID</body>
+				</resp>
+			</responses>
+		</endpoint>
+	</endpoints>
+</spec>
