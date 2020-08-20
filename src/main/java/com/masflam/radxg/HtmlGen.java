@@ -40,12 +40,18 @@ public final class HtmlGen {
 	public static String CSS_RESPONSE_BODY_TYPE_TD_CLASS = "radxg-response-body-type-td";
 	public static String CSS_RESPONSE_BODY_DESC_TD_CLASS = "radxg-response-body-desc-td";
 	
-	public static String generateHtml(Spec spec) {
+	public static String generateHtml(Spec spec, String title, String css) {
 		var outBuilder = new StringBuilder();
-		outBuilder.append("<div id=\"docs\">");
+		outBuilder.append("<html><head><title>")
+				.append(title)
+			.append("</title><style type=\"text/css\">")
+				.append(css)
+			.append("</style></head><body><div id=\"docs\">");
 		
 		genTypes(outBuilder, spec);
 		genEndpoints(outBuilder, spec);
+		
+		outBuilder.append("</div></body></html>");
 		
 		return outBuilder.toString();
 	}
@@ -89,7 +95,7 @@ public final class HtmlGen {
 			genEndpoint(outBuilder, endpoint);
 		}
 		
-		outBuilder.append("</div></div>");
+		outBuilder.append("</div>");
 	}
 	
 	private static void genEndpoint(StringBuilder outBuilder, Endpoint endpoint) {

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.masflam</groupId>
   <artifactId>rest-api-doc-xml-gen</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
   <developers>
     <developer>
       <name>Łukasz 'MasFlam' Drukała</name>
