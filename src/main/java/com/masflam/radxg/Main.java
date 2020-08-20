@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
 	
@@ -55,11 +56,13 @@ public class Main {
 				}
 			}
 			
+			/*  <ENDPOINT>  */
+			outBuilder.append("<div id=\"").append(endpoint.method).append(':').append(endpoint.path).append("\">");
+			
 			
 			
 			/*  <METHOD, PATH, DESC>  */
-			outBuilder.append("<div id=\"").append(endpoint.method).append(':').append(endpoint.path).append("\">")
-				.append("<h3><code>")
+			outBuilder.append("<h3><code>")
 					.append(endpoint.method)
 					.append("</code> <code>")
 					.append(endpoint.path)
@@ -126,121 +129,37 @@ public class Main {
 					response.desc = "";
 				}
 				
-				if(response.body.desc == null) {
-					response.body.desc = "";
+				if(response.body != null) {
+					if(response.body.desc == null) {
+						response.body.desc = "";
+					}
+					
+					outBuilder.append("<tr>")
+						.append("<td><code>").append(response.code).append("</code></td>")
+						.append("<td>").append(response.desc).append("</td>")
+						.append("<td><code>").append(response.body.type).append("</code></td>")
+						.append("<td>").append(response.body.desc).append("</td>")
+					.append("</tr>");
+				} else {
+					outBuilder.append("<tr>")
+						.append("<td><code>").append(response.code).append("</code></td>")
+						.append("<td>").append(response.desc).append("</td>")
+						.append("<td>none</td>")
+						.append("<td>none</td>")
+					.append("</tr>");
 				}
-				
-				outBuilder.append("<tr>")
-					.append("<td><code>").append(response.code).append("</code></td>")
-					.append("<td>").append(response.desc).append("</td>")
-					.append("<td><code>").append(response.body.type).append("</code></td>")
-					.append("<td>").append(response.body.desc).append("</td>")
-				.append("</tr>");
 			}
 			
 			outBuilder.append("</tbody></table>");
 			/*  </RESPONSES>  */
+			
+			
+			
+			outBuilder.append("</div>");
+			/*  </ENDPOINT>  */
 		}
 		
-		outBuilder.append("</div>").append("</div>");
-		/*  </ENDPOINTS>  */
-		
-		
-		
-		return outBuilder.toString();
-	}
-	
-	private static String generateMd(Spec spec) {
-		var outBuilder = new StringBuilder();
-		
-		
-		
-		/*  <DATA TYPES>  */
-		outBuilder.append("## API data types\n")
-			.append("| Type name | Explanation |\n")
-			.append("| --------- | ----------- |\n");
-		
-		for(ApiType type : spec.types) {
-			outBuilder.append("| `").append(type.name).append("` | ").append(type.desc).append(" |\n");
-		}
-		/*  </DATA TYPES>  */
-		
-		
-		
-		/*  <ENDPOINTS>  */
-		outBuilder.append("\n## API endpoints\n\n");
-		
-		for(Endpoint endpoint : spec.endpoints) {
-			if(endpoint.desc == null) {
-				endpoint.desc = "";
-			}
-			
-			if(endpoint.reqBody != null) {
-				if(endpoint.reqBody.desc == null) {
-					endpoint.reqBody.desc = "";
-				}
-			}
-			
-			
-			
-			/*  <METHOD, PATH, DESC>  */
-			outBuilder.append("### `").append(endpoint.method).append("` `").append(endpoint.path).append("`\n")
-				.append(endpoint.desc).append('\n');
-			/*  </METHOD, PATH, DESC>  */
-			
-			
-			
-			/*  <REQUEST PARAMS>  */
-			if(endpoint.reqParams.size() > 0) {
-				outBuilder.append("| Param name | Param type | Default value | Description |\n")
-					.append("| ---------- | ---------- | ------------- | ----------- |\n");
-			}
-			
-			for(ReqParam param : endpoint.reqParams) {
-				String def;
-				if(param.def == null) {
-					def = "none";
-				} else {
-					def = "`" + param.def + "`";
-				}
-				
-				if(param.desc == null) {
-					param.desc = "";
-				}
-				
-				outBuilder.append("| ").append(param.name)
-					.append(" | `").append(param.type)
-					.append("` | ").append(def)
-					.append(" | ").append(param.desc)
-					.append(" |\n");
-			}
-			/*  </REQUEST PARAMS>  */
-			
-			
-			
-			/*  <REQUEST BODY>  */
-			if(endpoint.reqBody != null) {
-				outBuilder.append("#### Request body: `").append(endpoint.reqBody.type).append("`\n")
-					.append(endpoint.reqBody.desc).append('\n');
-			}
-			/*  </REQUEST BODY>  */
-			
-			
-			
-			/*  <RESPONSES>  */
-			outBuilder.append("#### Responses\n")
-				.append("| Status code | Meaning | Body type | Explanation |\n")
-				.append("| ----------- | ------- | --------- | ----------- |\n");
-			
-			for(Resp response : endpoint.responses) {
-				outBuilder.append("| `").append(response.code)
-					.append("` | ").append(response.desc)
-					.append(" | `").append(response.body.type)
-					.append("` | ").append(response.body.desc)
-					.append(" |\n");
-			}
-			/*  </RESPONSES>  */
-		}
+		outBuilder.append("</div></div>");
 		/*  </ENDPOINTS>  */
 		
 		
@@ -260,17 +179,9 @@ public class Main {
 				try {
 					Spec spec = xmlMapper.readValue(new File(arg + ".xml"), Spec.class);
 					
-					for(ApiType type : spec.types) {
-						type.desc = type.desc.trim();
-					}
 					for(Endpoint endpoint : spec.endpoints) {
-						endpoint.desc = endpoint.desc.trim();
-						for(ReqParam param : endpoint.reqParams) {
-							param.desc = param.desc.trim();
-						}
-						for(Resp response : endpoint.responses) {
-							response.desc = response.desc.trim();
-							response.body.desc = response.body.desc.trim();
+						if(endpoint.reqParams == null) {
+							endpoint.reqParams = new ArrayList<>();
 						}
 					}
 					
@@ -285,17 +196,6 @@ public class Main {
 						}
 					} catch(IOException e) {
 						System.err.println("Failed to write file:\t" + arg + ".html");
-					}
-					
-					try {
-						String md = generateMd(spec);
-						var mdFile = new File(arg + ".md");
-						mdFile.createNewFile();
-						try(var fileOutputStream = new FileOutputStream(mdFile)) {
-							fileOutputStream.write(md.getBytes());
-						}
-					} catch(IOException e) {
-						System.err.println("Failed to write file:\t" + arg + ".md");
 					}
 				} catch(IOException e) {
 					System.err.println("Failed to read file:\t" + arg + ".xml");
