@@ -2,10 +2,7 @@ package com.masflam.radxg;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.masflam.radxg.xmltags.ApiType;
 import com.masflam.radxg.xmltags.Endpoint;
-import com.masflam.radxg.xmltags.ReqParam;
-import com.masflam.radxg.xmltags.Resp;
 import com.masflam.radxg.xmltags.Spec;
 
 import java.io.File;
