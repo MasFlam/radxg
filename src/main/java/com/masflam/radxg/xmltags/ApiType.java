@@ -1,12 +1,12 @@
-package com.masflam.radxg;
+package com.masflam.radxg.xmltags;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
-public class Body {
+public class ApiType {
 	
 	@JacksonXmlProperty(isAttribute = true)
-	public String type;
+	public String name;
 	
 	@JacksonXmlText
 	public String desc;

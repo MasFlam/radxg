@@ -1,4 +1,4 @@
-package com.masflam.radxg;
+package com.masflam.radxg.xmltags;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
