@@ -6,7 +6,7 @@
 
     <groupId>com.masflam</groupId>
     <artifactId>rest-api-doc-xml-gen</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <developers>
         <developer>
             <name>Łukasz 'MasFlam' Drukała</name>
