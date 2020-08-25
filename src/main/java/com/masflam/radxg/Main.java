@@ -26,7 +26,7 @@ public class Main {
 			
 			String fileBasename = fileBasePath.replaceAll("\\\\", "/");
 			int lastIndexOfSlash = fileBasename.lastIndexOf('/');
-			fileBasename = fileBasename.substring(lastIndexOfSlash != -1 ? lastIndexOfSlash : 0);
+			fileBasename = fileBasename.substring(lastIndexOfSlash != -1 ? lastIndexOfSlash + 1 : 0);
 			
 			
 			
